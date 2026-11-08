@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { Logo } from '../brand/Logo';
 import { siteConfig } from '../../data/siteData';
 import { 
@@ -19,6 +19,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('accueil');
+
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -99,34 +106,34 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
 
       {/* Main Navigation Bar - Light Architectural Glass with High Contrast */}
       <header
-        className={`transition-all duration-300 ${
+        className={`relative transition-all duration-300 ${
           scrolled
-            ? 'bg-white shadow-md py-2 sm:py-2.5 border-b border-slate-300'
+            ? 'bg-white/98 backdrop-blur-2xl py-2 sm:py-2.5 border-b border-slate-300 shadow-[0_10px_30px_-10px_rgba(15,23,42,0.08)]'
             : 'bg-white/95 backdrop-blur-xl py-2.5 sm:py-3.5 border-b border-slate-200 shadow-sm'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
           
           {/* Logo */}
           <a 
             href="#accueil" 
-            className="flex items-center group"
+            className="flex items-center group shrink-0"
           >
             <Logo variant="horizontal" size="md" theme="light" />
           </a>
 
           {/* Desktop Navigation Links with High Contrast & Framer Motion Animated Layout Pill */}
-          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 bg-slate-100 px-2 py-1.5 rounded-full border border-slate-300 shadow-inner relative">
+          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 bg-slate-100/90 px-2 py-1 xl:px-2.5 xl:py-1.5 rounded-full border border-slate-300 shadow-inner relative backdrop-blur-md">
             {navLinks.map((link) => {
               const isActive = activeSection === link.id;
               return (
                 <a
                   key={link.id}
                   href={link.href}
-                  className={`relative px-3 xl:px-3.5 py-1.5 rounded-full text-xs xl:text-[13px] font-bold tracking-tight xl:tracking-normal transition-colors duration-200 z-10 ${
+                  className={`relative px-2.5 xl:px-3.5 py-1.5 rounded-full text-xs xl:text-[13px] font-bold tracking-tight xl:tracking-normal transition-colors duration-200 z-10 whitespace-nowrap ${
                     isActive
                       ? 'text-white drop-shadow-sm font-extrabold'
-                      : 'text-slate-900 hover:text-amber-700 hover:bg-white/60'
+                      : 'text-slate-900 hover:text-amber-700 hover:bg-white/70'
                   }`}
                 >
                   {isActive && (
@@ -143,11 +150,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
           </nav>
 
           {/* Header Actions */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {/* Demander un Devis CTA Button */}
             <button
               onClick={() => onOpenQuoteModal()}
-              className="group relative inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-2.5 rounded-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 bg-[length:200%_auto] hover:bg-[position:right_center] text-white text-xs sm:text-xs font-extrabold uppercase tracking-wider shadow-md hover:shadow-lg border border-amber-400/50 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0"
+              className="group relative inline-flex items-center gap-2 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 bg-[length:200%_auto] hover:bg-[position:right_center] text-white text-xs font-extrabold uppercase tracking-wider shadow-md hover:shadow-lg border border-amber-400/50 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap"
             >
               <span>Demander un devis</span>
               <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
@@ -163,16 +170,23 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenQuoteModal }) => {
             </button>
           </div>
         </div>
+
+        {/* Laser Scroll Progress Line at Bottom Rim of Navbar */}
+        <motion.div
+          style={{ scaleX }}
+          className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-amber-600 via-amber-400 to-amber-600 origin-left z-20 pointer-events-none shadow-[0_0_8px_rgba(217,119,6,0.6)]"
+        />
       </header>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer with clean containment and custom scrollbar */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="lg:hidden bg-white border-b border-slate-300 px-4 sm:px-6 py-5 shadow-2xl max-h-[85vh] overflow-y-auto"
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="lg:hidden bg-white/98 backdrop-blur-2xl border-b border-slate-300 px-4 sm:px-6 py-5 shadow-2xl max-h-[80vh] overflow-y-auto overscroll-contain custom-scrollbar"
           >
             <nav className="flex flex-col gap-1.5">
               {navLinks.map((link) => (

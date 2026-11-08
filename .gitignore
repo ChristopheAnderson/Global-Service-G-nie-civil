@@ -27,3 +27,4 @@ dist-ssr
 # Raw scraped temp images (curated assets are in public/images)
 Images/
 scripts/maps-dump.html
+

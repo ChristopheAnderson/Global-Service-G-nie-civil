@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Lenis from 'lenis';
 import { Preloader } from './components/ui/Preloader';
 import { CursorGlow } from './components/ui/CursorGlow';
-import { ScrollProgressBar } from './components/ui/ScrollProgressBar';
 import { ArchitecturalFloatingDecorations } from './components/ui/ArchitecturalFloatingDecorations';
 import { KineticTicker } from './components/ui/KineticTicker';
 import { Navbar } from './components/layout/Navbar';
@@ -72,10 +71,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-50 text-slate-900 selection:bg-amber-500/20 selection:text-slate-900">
-      {/* Precision Scroll Progress Laser Bar */}
-      <ScrollProgressBar />
-
+    <div className="relative min-h-screen bg-slate-50 text-slate-900 selection:bg-amber-500/20 selection:text-slate-900 overflow-x-hidden max-w-full">
       {/* Interactive Cursor Light Beam (Desktop) */}
       <CursorGlow />
 
@@ -85,7 +81,7 @@ export const App: React.FC = () => {
       {/* Architectural Construction Preloader */}
       <Preloader />
 
-      {/* Top Navbar */}
+      {/* Top Navbar with integrated precision laser progress line */}
       <Navbar onOpenQuoteModal={handleOpenQuoteModal} />
 
       {/* Main Page Sections */}
