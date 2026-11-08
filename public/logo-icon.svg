@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="gsOrangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF9E42" />
+      <stop offset="100%" stop-color="#F28C28" />
+    </linearGradient>
+    <linearGradient id="gsBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E3E6E" />
+      <stop offset="100%" stop-color="#101C35" />
+    </linearGradient>
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#101C35" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Architectural Foundation Diamond -->
+  <rect x="25" y="25" width="150" height="150" rx="28" fill="#101C35" stroke="#173D65" stroke-width="3" />
+  
+  <!-- Subtle Blueprint grid lines in background -->
+  <line x1="25" y1="75" x2="175" y2="75" stroke="#173D65" stroke-width="1" stroke-dasharray="3 3" opacity="0.4"/>
+  <line x1="25" y1="125" x2="175" y2="125" stroke="#173D65" stroke-width="1" stroke-dasharray="3 3" opacity="0.4"/>
+  <line x1="75" y1="25" x2="75" y2="175" stroke="#173D65" stroke-width="1" stroke-dasharray="3 3" opacity="0.4"/>
+  <line x1="125" y1="25" x2="125" y2="175" stroke="#173D65" stroke-width="1" stroke-dasharray="3 3" opacity="0.4"/>
+
+  <!-- Architectural 'G' Pillar (Structural steel frame / concrete column) -->
+  <path d="M 100 50 
+           L 62 50 
+           A 38 38 0 0 0 62 126 
+           L 100 126 
+           L 100 95 
+           L 82 95" 
+        stroke="url(#gsOrangeGrad)" 
+        stroke-width="14" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        fill="none" 
+        filter="url(#subtleShadow)" />
+
+  <!-- Architectural 'S' Ascent (Rising structural tower / bridge arc) -->
+  <path d="M 138 68 
+           C 138 52 112 50 102 62 
+           C 90 76 138 88 138 114 
+           C 138 138 106 142 90 134" 
+        stroke="#FFFFFF" 
+        stroke-width="13" 
+        stroke-linecap="round" 
+        fill="none" />
+
+  <!-- Construction Apex Beam / Golden rivet -->
+  <polygon points="100,32 108,46 92,46" fill="#F28C28" />
+  <circle cx="100" cy="95" r="4" fill="#F28C28" />
+</svg>
+
