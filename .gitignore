@@ -25,6 +25,10 @@ dist-ssr
 *.sw?
 
 # Raw scraped temp images (curated assets are in public/images)
-Images/
+/Images/
 scripts/maps-dump.html
+
+# Ensure public/images is always tracked
+!public/images/
+!public/images/**
 

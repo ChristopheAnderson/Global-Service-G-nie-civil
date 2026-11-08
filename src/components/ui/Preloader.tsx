@@ -29,9 +29,10 @@ export const Preloader: React.FC<{ onComplete?: () => void }> = ({ onComplete })
     <AnimatePresence>
       {loading && (
         <motion.div
+          key="architectural-preloader"
           initial={{ opacity: 1 }}
-          exit={{ y: '-100%', transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-50 overflow-hidden"
+          exit={{ opacity: 0, y: '-100%', transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] } }}
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-50 overflow-hidden pointer-events-auto"
         >
           {/* Blueprint background grid */}
           <div className="absolute inset-0 bg-blueprint opacity-30" />

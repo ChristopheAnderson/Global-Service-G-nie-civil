@@ -10,6 +10,59 @@ const SCREEN_HEIGHT = 3.25;
 const SCREEN_DEPTH = 0.22;
 const SCREEN_ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT; // 1.60
 
+// Error Boundary to prevent any asset load failure from breaking the page
+interface ErrorBoundaryProps {
+  fallback: React.ReactNode;
+  children: React.ReactNode;
+}
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
+class ThreeErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error: any) {
+    console.warn("3D Asset fallback engaged:", error);
+  }
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+    return this.props.children;
+  }
+}
+
+// Procedural BIM fallback structure displayed if texture is loading or unavailable
+function FallbackBIMStructure({ nightMode, wireframeMode }: { nightMode: boolean; wireframeMode?: boolean }) {
+  return (
+    <group position={[0, 0, 0]}>
+      <mesh position={[0, 0, 0]}>
+        <boxGeometry args={[SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_DEPTH]} />
+        <meshStandardMaterial
+          color={nightMode ? '#0F172A' : '#1E293B'}
+          metalness={0.8}
+          roughness={0.2}
+          wireframe={true}
+        />
+      </mesh>
+      <mesh position={[0, 0, SCREEN_DEPTH / 2 + 0.01]}>
+        <planeGeometry args={[SCREEN_WIDTH * 0.9, SCREEN_HEIGHT * 0.9]} />
+        <meshStandardMaterial
+          color="#D97706"
+          metalness={0.9}
+          roughness={0.1}
+          wireframe={true}
+        />
+      </mesh>
+    </group>
+  );
+}
+
 // Realistic 3D Architectural Display Terminal with un-distorted aspect-ratio framing
 function RealisticBuildingDisplay({
   imageSrc,
@@ -287,13 +340,15 @@ export const ArchitecturalHero3D: React.FC<ArchitecturalHero3DProps> = ({ classN
 
         {/* Floating Realistic Monolith */}
         <Float speed={1.1} rotationIntensity={0.15} floatIntensity={0.25}>
-          <React.Suspense fallback={null}>
-            <RealisticBuildingDisplay
-              imageSrc={currentBuilding.src}
-              wireframeMode={wireframe}
-              nightMode={nightMode}
-            />
-          </React.Suspense>
+          <ThreeErrorBoundary fallback={<FallbackBIMStructure nightMode={nightMode} wireframeMode={wireframe} />}>
+            <React.Suspense fallback={<FallbackBIMStructure nightMode={nightMode} wireframeMode={wireframe} />}>
+              <RealisticBuildingDisplay
+                imageSrc={currentBuilding.src}
+                wireframeMode={wireframe}
+                nightMode={nightMode}
+              />
+            </React.Suspense>
+          </ThreeErrorBoundary>
         </Float>
 
         {/* Floating Construction Dust Particles */}
